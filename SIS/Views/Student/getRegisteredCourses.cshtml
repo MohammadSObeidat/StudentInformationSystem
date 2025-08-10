@@ -1,0 +1,134 @@
+﻿@model List<RegisteredCoursesModel>
+@using SIS.Services
+@inject IAccountService AccountService
+
+@{
+    var user = await AccountService.GetCurrentUserProfileAsync();
+}
+
+@{
+    ViewData["Title"] = "getRegisteredCourses";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-sub-header">
+                    <h3 class="page-title">Courses</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Courses</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card card-table comman-shadow">
+                <div class="card-body">
+
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="page-title">Courses</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Page Header -->
+
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="col-sm-12">
+                                <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                    <thead class="student-thread">
+
+                                        <tr role="row">
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 214.988px;">Section Number</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 214.988px;">Course Name</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 214.988px;">Instructor Name</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 214.988px;">Mark</th>
+                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 115.162px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (RegisteredCoursesModel course in Model)
+                                        {
+                                            <tr role="row" class="odd">
+
+                                                <td>
+                                                    @course.SectionNumber
+                                                </td>
+                                                <td>
+                                                    @course.CourseName
+                                                </td>
+                                                <td>
+                                                    @course.InstructorName
+                                                </td>
+                                                <td>
+                                                    @course.Mark
+                                                </td>
+                                                <td class="text-end">
+                                                    <div class="actions">
+                                                        @* <a asp-controller="Student" asp-action="RemoveStudentSection" asp-route-studentId="@user.Id" asp-route-sectionId="@course.SectionId" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-sm bg-success-light me-2">
+                                                            <i class="feather-delete" title="Delete"></i>
+                                                        </a> *@
+                                                        <a class="btn btn-sm bg-success-light me-2 delete-course" data-studentId="@user.Id" data-sectionId="@course.SectionId">
+                                                            <i class="feather-delete" title="Delete"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            @if (ViewBag.Message != null)
+                                            {
+                                                <td colspan="5" class="text-center">
+                                                    @ViewBag.Message
+                                                </td>
+                                            }
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@* =================================== Sweet Alert =============================== *@
+
+<script>
+    $(document).ready(function () {
+        $('.delete-course').click(function () {
+            const studentId = $(this).data('studentid');
+            const sectionId = $(this).data('sectionid');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to delete?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/Student/RemoveStudentSection?studentId=${studentId}&sectionId=${sectionId}`;
+                }
+            });
+        });
+    });
+</script>

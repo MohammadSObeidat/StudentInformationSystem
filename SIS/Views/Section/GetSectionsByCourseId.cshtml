@@ -1,0 +1,101 @@
+﻿@model List<SectionModel>
+@using SIS.Services
+@inject IAccountService AccountService
+
+@{
+    var user = await AccountService.GetCurrentUserProfileAsync();
+}
+
+@{
+    ViewData["Title"] = "GetSectionsByCourseId";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-sub-header">
+                    <h3 class="page-title">Sections</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Sections</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card card-table comman-shadow">
+                <div class="card-body">
+
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="page-title">Sections</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Page Header -->
+
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="col-sm-12">
+                                <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                    <thead class="student-thread">
+
+                                        <tr role="row">
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 214.988px;">Section Number</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 214.988px;">Capacity</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 214.988px;">Instructor Name</th>
+                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 115.162px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (SectionModel sec in Model)
+                                        {
+                                            <tr role="row" class="odd">
+
+                                                <td>
+                                                    @sec.SectionNumber
+                                                </td>
+                                                <td>
+                                                    @sec.MaxCapacity
+                                                </td>
+                                                <td>
+                                                    @sec.InstructorName
+                                                </td>
+                                                <td class="text-end">
+                                                    <a asp-controller="Student" asp-action="CourseRegister" asp-route-studentId="@user.Id" asp-route-sectionId="@sec.Id" onclick="return confirm('Are you sure you want to register this course?')" class="btn btn-sm bg-success-light me-2">
+                                                        Register
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            @if (ViewBag.Message != null)
+                                            {
+                                                <td colspan="3" class="text-center">
+                                                    @ViewBag.Message
+                                                </td>
+                                            }
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

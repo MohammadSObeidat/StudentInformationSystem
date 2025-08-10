@@ -1,0 +1,217 @@
+﻿@model VmDepartment
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="content container-fluid">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Departments</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="teachers.html">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">Departments</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <div class="row">
+        <form method="get" asp-controller="Department" asp-action="Index">
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-group">
+                        <input type="text" name="name" class="form-control" placeholder="Search by Name ..." value="@Context.Request.Query["searchTerm"]">
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="search-student-btn">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card card-table comman-shadow">
+                <div class="card-body">
+
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="page-title">Departments</h3>
+                            </div>
+                            @if (User.IsInRole("Manager"))
+                            {
+                                <div class="col-auto text-end float-end ms-auto download-grp">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#departmentModal">
+                                        <i class="fas fa-plus"></i> New Department
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <!-- /Page Header -->
+
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="col-sm-12">
+                                <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                    <thead class="student-thread">
+                                        <tr role="row">
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 214.988px;">Name</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="No of Students: activate to sort column ascending" style="width: 157.812px;">No of Students</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="No of Students: activate to sort column ascending" style="width: 157.812px;">No of Instructors</th>
+                                            @if (User.IsInRole("Manager"))
+                                            {
+                                                <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 115.162px;">Action</th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (DepartmentModel department in Model.Departments)
+                                        {
+                                            <tr role="row" class="odd">
+                                                <td>
+                                                    <h2>
+                                                        <a>@department.Name</a>
+                                                    </h2>
+                                                </td>
+                                                <td>@department.StudentCount</td>
+                                                <td>@department.InstructorCount</td>
+                                                @if (User.IsInRole("Manager"))
+                                                {
+                                                    <td class="text-end">
+                                                        <div class="actions">
+                                                            @* <a asp-controller="Department" asp-action="Delete" asp-route-id="@department.Id" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-sm bg-success-light me-2">
+                                                                <i class="feather-delete" title="Delete"></i>
+                                                            </a> *@
+                                                            <a class="btn btn-sm bg-success-light me-2 delete-department" data-id="@department.Id">
+                                                                <i class="feather-delete" title="Delete"></i>
+                                                            </a>
+                                                            <a asp-controller="Department" asp-action="Edit" asp-route-id="@department.Id" class="btn btn-sm bg-danger-light">
+                                                                <i class="feather-edit" title="Edit"></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                }
+                                            </tr>
+                                        }
+                                        <tr>
+                                            @if (ViewBag.Message != null)
+                                            {
+                                                <td colspan="4" class="text-center">
+                                                    @ViewBag.Message
+                                                </td>
+                                            }
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+@* ============== Create ======================= *@
+
+<div class="modal fade" id="departmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Department Details</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post">
+                <div class="modal-body">
+                    <input type="hidden" asp-for="Department.Id" class="form-control">
+                    <label>Department Name</label>
+                    <input type="text" asp-for="Department.Name" class="form-control" placeholder="Department Name">
+                    <div class="mt-2">
+                        <span class="text-danger" asp-validation-for="Department.Name"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="student-submit">
+                        <button type="submit" asp-controller="Department" asp-action="Save" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* ============== Update ======================= *@
+
+@if (Model?.Department?.Id > 0)
+{
+    <div class="modal show d-block" tabindex="-1" role="dialog" id="departmentModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <form method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Department</h5>
+                        <a href="@Url.Action("Index", "Department")" class="btn-close"></a>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="Department.Id" />
+                        <input type="text" asp-for="Department.Name" class="form-control" />
+                        <span asp-validation-for="Department.Name" class="text-danger"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="student-submit">
+                            <button type="submit" asp-controller="Department" asp-action="Update" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@* =================================== Sweet Alert =============================== *@
+
+<script>
+    $(document).ready(function () {
+        $(".delete-department").click(function () {
+            let departmentId = $(this).data("id");
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to delete?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to Delete action
+                    window.location.href = '/Department/Delete/' + departmentId;
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,92 @@
+﻿@model VmCourse
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="content container-fluid">
+
+	<!-- Page Header -->
+	<div class="page-header">
+		<div class="row align-items-center">
+			<div class="col">
+				<h3 class="page-title">@( (bool)ViewData["isEdit"] ? "Edit Course" : "Add Course" )</h3>
+				<ul class="breadcrumb">
+					<li class="breadcrumb-item"><a href="subjects.html">Course</a></li>
+					<li class="breadcrumb-item active">Add Course</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- /Page Header -->
+
+	<div class="row">
+		<div class="col-sm-12">
+
+			<div class="card">
+				<div class="card-body">
+					<form method="post">
+						<div class="row">
+							<div class="col-12">
+								<h5 class="form-title"><span>Course Information</span></h5>
+							</div>
+							<div class="col-12">
+								<div class="form-group local-forms">
+									<input type="hidden" asp-for="Course.Id" class="form-control" >
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-group local-forms">
+									<label>Course Name <span class="login-danger">*</span></label>
+									<input type="text" asp-for="Course.Name" class="form-control" placeholder="Course Name">
+									<div class="mt-2">
+										<span asp-validation-for="Course.Name" class="text-danger"></span>
+									</div>
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-group local-forms">
+									<label>Course Description <span class="login-danger">*</span></label>
+									<textarea asp-for="Course.Description" class="form-control" placeholder="Course Description"></textarea>
+									<div class="mt-2">
+										<span asp-validation-for="Course.Description" class="text-danger"></span>
+									</div>
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-group local-forms">
+									<label>Department <span class="login-danger">*</span></label>
+									<select asp-for="Course.DepartmentId" class="form-control select select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+										<option>Please Select Department </option>
+										@foreach (DepartmentModel department in Model.Departments)
+										{
+											<option value="@department.Id">@department.Name</option>
+										}
+									</select>
+									<div class="mt-2">
+										<span asp-validation-for="Course.DepartmentId" class="text-danger"></span>
+									</div>
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="student-submit text-end">
+									@if ((bool)ViewData["isEdit"])
+									{
+										<button type="submit" asp-controller="Course" asp-action="Update" class="btn btn-primary">Update</button>
+									}
+									else
+									{
+										<button type="submit" asp-controller="Course" asp-action="Save" class="btn btn-primary">Save</button>
+									}
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+

@@ -1,0 +1,176 @@
+﻿@model VmStudent
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col-sm-12">
+                <div class="page-sub-header">
+                    <h3 class="page-title">@( (bool)ViewData["isEdit"] ? "Edit Students" : "Add Students" )</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-controller="Student" asp-action="Index">Student</a></li>
+                        <li class="breadcrumb-item active">Add Students</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card comman-shadow">
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="form-title student-info">Student Information</h5>
+                            </div>
+                            <div class="col-12">
+                                <div>
+                                    <input type="hidden" style="display: none" asp-for="Student.Id" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label>Student Number <span class="login-danger">*</span></label>
+                                    <input type="number" asp-for="Student.StudentNumber" class="form-control" placeholder="Enter Student Number" />
+                                    <div class="mt-2">
+                                        <span asp-validation-for="Student.StudentNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label>First Name <span class="login-danger">*</span></label>
+                                    <input type="text" asp-for="Student.FirstName" class="form-control" placeholder="Enter First Name" />
+                                    <div class="mt-2">
+                                        <span asp-validation-for="Student.FirstName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label>Last Name <span class="login-danger">*</span></label>
+                                    <input type="text" asp-for="Student.LastName" class="form-control" placeholder="Enter Last Name" />
+                                    <div class="mt-2">
+                                        <span asp-validation-for="Student.LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label>Gender <span class="login-danger">*</span></label>
+                                    <select asp-for="Student.Gender" class="form-control select select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                                        <option>Select Gender</option>
+                                        <option>Female</option>
+                                        <option>Male</option>
+                                    </select>
+                                    <div class="mt-2">
+                                        <span asp-validation-for="Student.Gender" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms calendar-icon">
+                                    <label>Date Of Birth  <span class="login-danger">*</span></label>
+                                    <input type="date" asp-for="Student.DOB" class="form-control" placeholder="DD-MM-YYYY" />
+                                    <div class="mt-2">
+                                        <span asp-validation-for="Student.DOB" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label>E-Mail <span class="login-danger">*</span></label>
+                                    <input type="email" asp-for="Student.Email" class="form-control" placeholder="Enter Email Address" />
+                                    <div class="mt-2">
+                                        <span asp-validation-for="Student.Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label>Department <span class="login-danger">*</span></label>
+                                    <select asp-for="Student.DepartmentId" class="form-control select select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                                        <option>Please Select Department </option>
+                                        @foreach (DepartmentModel department in Model.Department)
+                                        {
+                                            <option value="@department.Id">@department.Name</option>
+                                        }
+                                    </select>
+                                    <div class="mt-2">
+                                        <span asp-validation-for="Student.DepartmentId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label>Password <span class="login-danger">*</span></label>
+                                    <input type="password" asp-for="Student.Password" class="form-control" placeholder="Enter Password" />
+                                    <div class="mt-2">
+                                        <span asp-validation-for="Student.Password" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group students-up-files">
+                                    <label>Upload Student Photo</label>
+                                    <div class="uplod">
+                                        <label class="file-upload image-upbtn mb-0">
+                                            Choose File <input type="file" asp-for="Student.Image" onchange="DisplayImage(this)" />
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <img id="imagePreview"
+                                     src="@(Url.Content("~/images/" + Model.Student.FileName))"
+                                     style="@(string.IsNullOrEmpty(Model.Student.FileName) ? "display:none;" : "display:block;") min-width:300px; max-width:300px; min-height:200px; max-height:200px;"
+                                     alt="Student Photo" />
+                            </div>
+
+                            <input type="hidden" asp-for="Student.ExistingImage" />
+
+                            <div class="col-12 mt-3">
+                                <div class="student-submit text-end">
+                                    @if ((bool)ViewData["isEdit"])
+                                    {
+                                        <button type="submit" asp-controller="Student" asp-action="Update" class="btn btn-primary">Update</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" asp-controller="Student" asp-action="Save" class="btn btn-primary">Save</button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function DisplayImage(input) {
+        let image = document.getElementById("imagePreview")
+        let file = input.files[0]
+        if (file) {
+            image.src = URL.createObjectURL(file)
+            image.style.display = 'block'
+        } else {
+            image.src = ''
+            image.style.display = 'none'
+        }
+    }
+</script>
+

@@ -1,0 +1,107 @@
+﻿@model VmSection
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">@( (bool)ViewData["isEdit"] ? "Edit Section" : "Add Section" )</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Section" asp-action="Index">Section</a></li>
+                    <li class="breadcrumb-item active">Add Section</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="form-title"><span>Section Information</span></h5>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group local-forms">
+                                    <input type="hidden" asp-for="Section.Id" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group local-forms">
+                                    <label>Section Number <span class="login-danger">*</span></label>
+                                    <input type="text" asp-for="Section.SectionNumber" class="form-control" placeholder="Section Number">
+                                    <div class="mt-2">
+                                        <span asp-validation-for="Section.SectionNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group local-forms">
+                                    <label>Max Capacity <span class="login-danger">*</span></label>
+                                    <input type="text" asp-for="Section.MaxCapacity" class="form-control" placeholder="Max Capacity">
+                                    <div class="mt-2">
+                                        <span asp-validation-for="Section.MaxCapacity" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group local-forms">
+                                    <label>Course <span class="login-danger">*</span></label>
+                                    <select asp-for="Section.CourseId" class="form-control select select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                                        <option>Please Select Course </option>
+                                        @foreach (CourseModel course in Model.Course.Courses)
+                                        {
+                                            <option value="@course.Id">@course.Name</option>
+                                        }
+                                    </select>
+                                    <div class="mt-2">
+                                        <span asp-validation-for="Section.CourseId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group local-forms">
+                                    <label>Instructor <span class="login-danger">*</span></label>
+                                    <select asp-for="Section.InstructorId" class="form-control select select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                                        <option>Please Select Instructor</option>
+                                        @foreach (InstructorModel instructor in Model.Instructor.Instructors)
+                                        {
+                                            <option value="@instructor.Id">@(instructor.FirstName + " " + instructor.LastName)</option>
+                                        }
+                                    </select>
+                                    <div class="mt-2">
+                                        <span asp-validation-for="Section.InstructorId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="student-submit text-end">
+                                    @if ((bool)ViewData["isEdit"])
+                                    {
+                                        <button type="submit" asp-controller="Section" asp-action="Update" class="btn btn-primary">Update</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" asp-controller="Section" asp-action="Save" class="btn btn-primary">Save</button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

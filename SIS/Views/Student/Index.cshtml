@@ -1,0 +1,195 @@
+﻿@model PagedStudentResult
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-sub-header">
+                    <h3 class="page-title">Students</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-controller="Student" asp-action="Index">Student</a></li>
+                        <li class="breadcrumb-item active">All Students</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <form method="get">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                    <input type="text" name="studentNumber" class="form-control" placeholder="Search by Student Number ...">
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="search-student-btn">
+                    <button asp-controller="Student" asp-action="Index" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card card-table comman-shadow">
+                <div class="card-body">
+
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="page-title">Students</h3>
+                            </div>
+                            @if (User.IsInRole("Manager"))
+                            {
+                                <div class="col-auto text-end float-end ms-auto download-grp">
+                                    <a asp-controller="Student" asp-action="Create" class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> New Student
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <!-- /Page Header -->
+
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="col-sm-12">
+                                <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                    <thead class="student-thread">
+
+                                        <tr role="row">
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 214.988px;">Image</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 214.988px;">Student Number</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 214.988px;">Name</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="No of Students: activate to sort column ascending" style="width: 157.812px;">Email</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="No of Students: activate to sort column ascending" style="width: 157.812px;">DOB</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="No of Students: activate to sort column ascending" style="width: 157.812px;">Gender</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="No of Students: activate to sort column ascending" style="width: 157.812px;">Department Name</th>
+                                            @if (User.IsInRole("Manager"))
+                                            {
+                                                <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 115.162px;">Action</th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (StudentModel student in Model.Students)
+                                        {
+                                            <tr role="row" class="odd">
+                                                <td>
+                                                    <h2>
+                                                        <img src="~/images/@student.FileName" style="width: 50px; height: 50px" alt="Alternate Text" />
+                                                    </h2>
+                                                </td>
+                                                <td>
+                                                    @student.StudentNumber
+                                                </td>
+                                                <td>
+                                                    @(student.FirstName + " " + student.LastName)
+                                                </td>
+                                                <td>
+                                                    @student.Email
+                                                </td>
+                                                <td>
+                                                    @student.DOB.ToString("yyyy-MM-dd")
+                                                </td>
+                                                <td>
+                                                    @student.Gender
+                                                </td>
+                                                <td>
+                                                    @student.DepartmentName
+                                                </td>
+                                                @if (User.IsInRole("Manager"))
+                                                {
+                                                    <td class="text-end">
+                                                        <div class="actions">
+                                                            @* <a asp-controller="Student" asp-action="Delete" asp-route-id="@student.Id" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-sm bg-success-light me-2">
+                                                                <i class="feather-delete" title="Delete"></i>
+                                                            </a> *@
+                                                            <a class="btn btn-sm bg-success-light me-2 delete-student" data-id="@student.Id">
+                                                                <i class="feather-delete" title="Delete"></i>
+                                                            </a>
+                                                            <a asp-controller="Student" asp-action="Edit" asp-route-id="@student.Id" class="btn btn-sm bg-danger-light">
+                                                                <i class="feather-edit" title="Edit"></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                }
+                                            </tr>
+                                        }
+                                        <tr>
+                                            @if (ViewBag.Message != null)
+                                            {
+                                                <td colspan="8" class="text-center">
+                                                    @ViewBag.Message
+                                                </td>
+                                            }
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="mt-5">
+                                    <nav class="d-flex justify-content-end" aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                                                <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage - 1 })" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            @for (int i = 1; i <= Model.TotalPages; i++)
+                                            {
+                                                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                                    <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                                                </li>
+                                            }
+                                            <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                                                <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage + 1 })" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* =================================== Sweet Alert =============================== *@
+
+<script>
+    $(document).ready(function () {
+        $(".delete-student").click(function () {
+            let studentId = $(this).data("id");
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to delete?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to Delete action
+                    window.location.href = '/Student/Delete/' + studentId;
+                }
+            });
+        });
+    });
+</script>

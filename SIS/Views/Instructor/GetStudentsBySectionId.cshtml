@@ -1,0 +1,89 @@
+﻿@model List<StudentModel>
+
+@{
+    ViewData["Title"] = "GetStudentsBySectionId";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-sub-header">
+                    <h3 class="page-title">All Students For Section</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-controller="Instructor" asp-action="Index">Instructor</a></li>
+                        <li class="breadcrumb-item active">All Instructors</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card card-table comman-shadow">
+                <div class="card-body">
+
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="page-title">Students</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Page Header -->
+
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="col-sm-12">
+                                <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                    <thead class="student-thread">
+
+                                        <tr role="row">
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 214.988px;">Student Number</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 214.988px;">Student Name</th>
+                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 115.162px;">Department Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (StudentModel student in Model)
+                                        {
+                                            <tr role="row" class="odd">
+
+                                                <td>
+                                                    @student.StudentNumber
+                                                </td>
+                                                <td>
+                                                    @(student.FirstName + " " + student.LastName)
+                                                </td>
+                                                <td>
+                                                    @student.DepartmentName
+                                                </td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            @if (ViewBag.Message != null)
+                                            {
+                                                <td colspan="3" class="text-center">
+                                                    @ViewBag.Message
+                                                </td>
+                                            }
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
