@@ -138,12 +138,14 @@ namespace SIS.Services
             sisContext.SaveChanges();
         }
 
-        public void DeleteStudent(int id)
+        public Student DeleteStudent(int id)
         {
             Student student = sisContext.Student.Find(id);
             sisContext.Remove(student);
 
             sisContext.SaveChanges();
+
+            return student;
         }
 
         public void CourseRegister(int studentId, int sectionId)

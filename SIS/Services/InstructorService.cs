@@ -158,13 +158,15 @@ namespace SIS.Services
             sisContext.SaveChanges();
         }
 
-        public void DeleteInstructor(int id)
+        public Instructor DeleteInstructor(int id)
         {
             Instructor instructor = sisContext.Instructor.Find(id);
 
             sisContext.Remove(instructor);
 
             sisContext.SaveChanges();
+
+            return instructor;
         }
 
         public List<InstructorCoursesModel> GetInstructorCourses(int id)

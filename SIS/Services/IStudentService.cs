@@ -1,4 +1,5 @@
-﻿using SIS.Models;
+﻿using SIS.Data;
+using SIS.Models;
 
 namespace SIS.Services
 {
@@ -8,7 +9,7 @@ namespace SIS.Services
         PagedStudentResult GetAllStudents(int studentNumber, int page);
         StudentModel GetStudentById(int id);
         void UpdateStudent(VmStudent vmStudent);
-        void DeleteStudent(int id);
+        Student DeleteStudent(int id);
         void CourseRegister(int studentId, int sectionId);
         List<RegisteredCoursesModel> getRegisteredCourses(int studentId);
         void RemoveStudentSection(int studentId, int sectionId);

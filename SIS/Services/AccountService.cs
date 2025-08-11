@@ -160,5 +160,15 @@ namespace SIS.Services
 
             return result;
         }
+
+        public async Task DeleteAccount(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+
+            if (user != null)
+            {
+                await userManager.DeleteAsync(user);
+            }
+        }
     }
 }

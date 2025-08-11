@@ -117,9 +117,11 @@ namespace SIS.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            studentService.DeleteStudent(id);
+            Student student = studentService.DeleteStudent(id);
+
+            await accountService.DeleteAccount(student.UserId);
 
             TempData["message"] = "Student Deleted Successfully";
 

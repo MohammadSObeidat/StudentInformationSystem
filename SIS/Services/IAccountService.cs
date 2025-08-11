@@ -14,5 +14,6 @@ namespace SIS.Services
         Task<string> GetCurrentUserRoleAsync();
         Task Logout();
         Task<IdentityResult> ChangePassword(ChangePasswordModel changePasswordModel);
+        Task DeleteAccount(string userId);
     }
 }
