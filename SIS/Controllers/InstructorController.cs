@@ -152,7 +152,7 @@ namespace SIS.Controllers
 
         public IActionResult GetStudentsBySectionId(int instructorId, int courseId, int sectionId)
         {
-            List<StudentModel> students = instructorService.GetStudentsBySectionId(instructorId, courseId, sectionId);
+            List<StudentGradeModel> students = instructorService.GetStudentsBySectionId(instructorId, courseId, sectionId);
 
             if (!students.Any())
             {
@@ -160,6 +160,13 @@ namespace SIS.Controllers
             }
 
             return View("GetStudentsBySectionId", students);
+        }
+
+        public IActionResult SaveGrades(List<StudentGradeModel> studentsGrades)
+        {
+            instructorService.SaveGrades(studentsGrades);
+
+            return RedirectToAction("Dashboard");
         }
     }
 }

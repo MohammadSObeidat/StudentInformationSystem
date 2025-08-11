@@ -214,7 +214,7 @@ namespace SIS.Services
             return sections;
         }
 
-        public List<StudentModel> GetStudentsBySectionId(int instructorId, int courseId, int sectionId)
+        public List<StudentGradeModel> GetStudentsBySectionId(int instructorId, int courseId, int sectionId)
         {
             //List<StudentModel> students = (from ss in sisContext.StudentSection
             //                               join s in sisContext.Student on ss.StudentId equals s.Id
@@ -230,18 +230,39 @@ namespace SIS.Services
             //                                   DepartmentName = s.Department.Name
             //                               }).ToList();
 
-            List<StudentModel> students = sisContext.StudentSection.Where(ss => ss.SectionId == sectionId
+            List<StudentGradeModel> students = sisContext.StudentSection.Where(ss => ss.SectionId == sectionId
                                                                     && ss.Section.Course.Id == courseId
-                                                                    && ss.Section.Instructor.Id == instructorId).Select(ss => new StudentModel
+                                                                    && ss.Section.Instructor.Id == instructorId).Select(ss => new StudentGradeModel
                                                                     {
+                                                                        Id = ss.Student.Id,
                                                                         StudentNumber = ss.Student.StudentNumber,
                                                                         FirstName = ss.Student.FirstName,
                                                                         LastName = ss.Student.LastName,
-                                                                        DepartmentName = ss.Student.Department.Name
+                                                                        DepartmentName = ss.Student.Department.Name,
+                                                                        SectionId = sectionId
 
                                                                     }).ToList();
 
             return students;
+        }
+
+        public void SaveGrades(List<StudentGradeModel> studentsGrades)
+        {
+            List<Grade> gradesList = new List<Grade>();
+
+            foreach (StudentGradeModel student in studentsGrades)
+            {
+                Grade grade = new Grade();
+                grade.Mark = student.Mark;
+                grade.SectionId = student.SectionId;
+                grade.StudentId = student.Id;
+
+                gradesList.Add(grade);
+            }
+
+            sisContext.Grade.AddRange(gradesList);
+
+            sisContext.SaveChanges();
         }
     }
 }

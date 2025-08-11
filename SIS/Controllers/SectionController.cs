@@ -6,7 +6,7 @@ using SIS.Services;
 
 namespace SIS.Controllers
 {
-    [Authorize(Roles = "Manager, Instructor, Student")]
+    [Authorize(Roles = "Manager, Student")]
     public class SectionController : Controller
     {
         ICourseService courseService;

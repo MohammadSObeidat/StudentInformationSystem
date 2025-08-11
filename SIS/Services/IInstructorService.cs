@@ -11,6 +11,7 @@ namespace SIS.Services
         void DeleteInstructor(int id);
         List<InstructorCoursesModel> GetInstructorCourses(int id);
         List<InstructorCoursesSectionModel> GetSectionsByInstructorAndCourse(int instructorId, int courseId);
-        List<StudentModel> GetStudentsBySectionId(int instructorId, int courseId, int sectionId);
+        List<StudentGradeModel> GetStudentsBySectionId(int instructorId, int courseId, int sectionId);
+        void SaveGrades(List<StudentGradeModel> studentsGrades);
     }
 }

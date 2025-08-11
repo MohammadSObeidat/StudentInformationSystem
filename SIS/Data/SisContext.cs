@@ -22,7 +22,6 @@ namespace SIS.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // المفتاح المركب
             modelBuilder.Entity<StudentSection>()
                 .HasKey(ss => new { ss.StudentId, ss.SectionId });
 
