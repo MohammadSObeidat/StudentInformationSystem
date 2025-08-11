@@ -168,7 +168,7 @@ namespace SIS.Controllers
         {
             instructorService.SaveGrades(studentsGrades);
 
-            return RedirectToAction("Dashboard");
+            return RedirectToAction("Index", "Dashboard");
         }
     }
 }
